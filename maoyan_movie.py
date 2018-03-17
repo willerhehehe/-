@@ -17,6 +17,7 @@ response=requests.get(url,headers=headers)
 a=response.text
 pattern=re.compile('<dd>.*?<i.*?>(.*?)</i>.*?<a.*?title="(.*?)".*?</a>.*?class="star">(.*?)</p>.*?class="releasetime">(.*?)</p>.*?class="integer">(.*?)</i>.*?class="fraction">(.*?)</i>',re.S)
 pattern.findall(a)
+rank={}
 
 def get_one_page(url,headers):
 	try:
@@ -28,4 +29,11 @@ def get_one_page(url,headers):
 	except RequestException:
 		return None
 
-def parse_one_page()
+def parse_one_page(text,pattern):
+	result_list=pattern.findall(text)
+	for i in range(len(result_list)):
+		rank[int(result_list[i][0])]={}
+		rank[int(result_list[i][0])]['name']=result_list[i][1]
+		rank[int(result_list[i][0])]['actor']=re.sub('[\n\s]*','',result_list[i][2])
+		rank[int(result_list[i][0])]['release_time']=result_list[i][3]
+		rank[int(result_list[i][0])]['score']=result_list[i][4]+result_list[i][5]
